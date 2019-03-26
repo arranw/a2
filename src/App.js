@@ -1,26 +1,32 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import OrderPage from "./components/pages/OrderPage";
+import InfoPage from "./components/pages/InfoPage";
+import EditItem from "./components/orderforms/EditItem";
+import Header from "./components/layout/Header";
+import AboutPage from "./components/pages/AboutPage";
+
+import "./App.css";
+import { Provider } from "./components/contexts/Context";
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Provider>
+        <Router>
+          <div className="App">
+            <Header />
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={InfoPage} />
+                <Route exact path="/order" component={OrderPage} />
+                <Route exact path="/order/item/edit/:id" component={EditItem} />
+                <Route exact path="/about" component={AboutPage} />
+              </Switch>
+            </div>
+          </div>
+        </Router>
+      </Provider>
     );
   }
 }
