@@ -2,7 +2,7 @@
   "name": "a2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://arranw.github.io/cityDeli",
+  "homepage": "https://arranw.github.io/a2",
   "dependencies": {
     "classnames": "^2.2.6",
     "context": "0.0.1",
