@@ -7,6 +7,18 @@ export default class OrderSummary extends Component {
     display: true
   };
 
+  tallyPrices(orderItems) {
+    let total = 0;
+    for (let i = 0; i < orderItems.length; i++) {
+      let itemTotal = 0;
+      itemTotal += orderItems[i].typePrice;
+      itemTotal += orderItems[i].extrasPrice;
+      itemTotal *= orderItems[i].quantity;
+      total += itemTotal;
+    }
+    return total;
+  }
+
   render() {
     return (
       <Consumer>
@@ -55,6 +67,9 @@ export default class OrderSummary extends Component {
                     </ul>
                   </div>
                 ) : null}
+                <div className="card-footer">
+                  <h5>Total: ${this.tallyPrices(orderItems).toFixed(2)}</h5>
+                </div>
               </div>
             </div>
           );

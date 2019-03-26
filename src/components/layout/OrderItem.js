@@ -10,7 +10,7 @@ export default class OrderItem extends Component {
         {value => {
           const { dispatch } = value;
           return (
-            <li className="list-group-item">
+            <li className="list-group-item" style={{ maxWidth: "200px" }}>
               <div>
                 <i
                   className="fas fa-times"
@@ -26,20 +26,21 @@ export default class OrderItem extends Component {
                   />
                 </Link>
               </div>
-              <span style={{ float: "left" }}>
-                {orderItem.quantity}x {orderItem.size} {orderItem.selectedType}
-                {orderItem.extras !== undefined ? (
-                  <ul>
-                    {orderItem.extras.map(extra =>
-                      extra.selected ? (
-                        <li key={orderItem.extras.indexOf(extra)}>
-                          {extra.name}
-                        </li>
-                      ) : null
-                    )}
-                  </ul>
-                ) : null}
-              </span>
+              {orderItem.quantity}x {orderItem.size} {orderItem.selectedType}
+              {orderItem.extras !== undefined ? (
+                <ul>
+                  {orderItem.extras.map(extra =>
+                    extra.selected ? (
+                      <li
+                        className="text-left"
+                        key={orderItem.extras.indexOf(extra)}
+                      >
+                        {extra.name}
+                      </li>
+                    ) : null
+                  )}
+                </ul>
+              ) : null}
             </li>
           );
         }}

@@ -9,7 +9,10 @@ export default class AboutPage extends Component {
             <h3>About</h3>
           </div>
           <div className="card-body">
-            <p>This is my first, fully self-coded React app.</p>
+            <p>
+              This is my first, fully self-coded React app. I desperately hope I
+              rewrite this some day.
+            </p>
           </div>
         </div>
       </div>

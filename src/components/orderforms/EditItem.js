@@ -93,7 +93,6 @@ export default class EditItem extends Component {
       return;
     }
 
-    console.log(this.state);
     dispatch({
       type: "UPDATE_ITEM",
       payload: this.state

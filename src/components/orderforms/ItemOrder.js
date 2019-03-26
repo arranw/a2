@@ -12,6 +12,8 @@ export default class ItemOrder extends Component {
     selectedType: "",
     size: "",
     id: uuid.v1(),
+    extrasPrice: 0,
+    typePrice: 0,
     extras: [
       { name: "Extra Cheese", selected: false },
       { name: "Pepperoni", selected: false },
@@ -23,6 +25,42 @@ export default class ItemOrder extends Component {
   };
 
   setSelected = e => {
+    switch (e) {
+      case "All Garden Vegetarian Sandwich":
+        this.setState({ typePrice: 7.5 });
+        break;
+      case "Big Beef On a Bun Sandwich":
+        this.setState({ typePrice: 8.5 });
+        break;
+      case "Mixed Grill":
+      case "Grilled Pork Sandwich":
+        this.setState({ typePrice: 9.5 });
+        break;
+      case "Extra Meaty":
+      case "Really Veggy":
+      case "Very Cheesy":
+        switch (this.state.size) {
+          case "S":
+            console.log("dsa");
+            this.setState({ typePrice: 8.5 });
+            console.log(this.state.typePrice);
+            break;
+          case "M":
+            this.setState({ typePrice: 11.5 });
+            break;
+          case "L":
+            this.setState({ typePrice: 14 });
+            break;
+          case "XL":
+            this.setState({ typePrice: 16.5 });
+            break;
+          default:
+            this.setState({ typePrice: 0 });
+        }
+        break;
+      default:
+        this.setState({ typePrice: 0 });
+    }
     this.setState({ selectedType: e });
   };
 
@@ -35,8 +73,12 @@ export default class ItemOrder extends Component {
         return elem.name === e.name;
       })
     ] = e;
+    let p = 0;
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].selected) p += 1.75;
+    }
     // array.map(elem => (elem.name === e.name ? newElem : elem));
-    this.setState({ extras: array });
+    this.setState({ extras: array, extrasPrice: p });
   };
 
   submitItem = (dispatch, e) => {
@@ -50,8 +92,8 @@ export default class ItemOrder extends Component {
       this.setState({ errors: { name: "Quantity is required." } });
       return;
     }
-    if (parseInt(quantity) < 0) {
-      this.setState({ errors: { name: "Quantity must be positive." } });
+    if (parseInt(quantity) < 1) {
+      this.setState({ errors: { name: "Quantity must more than 0." } });
       return;
     }
     if (size === "" && this.props.sizes !== undefined) {
@@ -66,7 +108,57 @@ export default class ItemOrder extends Component {
     this.clearState();
   };
 
-  actionHandler = e => this.setState({ [e.target.name]: e.target.value });
+  actionHandler = e => {
+    console.log(e.target.type);
+    if (e.target.type === "select-one") {
+      switch (this.state.selectedType) {
+        case "Extra Meaty":
+        case "Really Veggy":
+        case "Very Cheesy":
+          switch (e.target.value) {
+            case "S":
+              this.setState({ typePrice: 8.5 });
+              break;
+            case "M":
+              this.setState({ typePrice: 11.5 });
+              break;
+            case "L":
+              this.setState({ typePrice: 14 });
+              break;
+            case "XL":
+              this.setState({ typePrice: 16.5 });
+              break;
+            default:
+              this.setState({ typePrice: 0 });
+          }
+          break;
+        case "Root Beer":
+        case "Sprite":
+        case "Orange Soda":
+        case "Coca Cola":
+          switch (e.target.value) {
+            case "S":
+              this.setState({ typePrice: 1.25 });
+              break;
+            case "M":
+              this.setState({ typePrice: 1.75 });
+              break;
+            case "L":
+              this.setState({ typePrice: 2 });
+              break;
+            case "XL":
+              this.setState({ typePrice: 2.25 });
+              break;
+            default:
+              this.setState({ typePrice: 0 });
+          }
+          break;
+      }
+    }
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   clearState() {
     let array = [];
@@ -91,7 +183,15 @@ export default class ItemOrder extends Component {
 
   render() {
     const { name, images, sizes, hasExtras } = this.props;
-    const { size, selectedType, quantity, extras, errors } = this.state;
+    const {
+      size,
+      selectedType,
+      quantity,
+      extras,
+      errors,
+      extrasPrice,
+      typePrice
+    } = this.state;
     return (
       <Consumer>
         {value => {
@@ -174,6 +274,16 @@ export default class ItemOrder extends Component {
                     )}
                   </div>
                 </div>
+              </div>
+              <div>
+                <h4>
+                  $
+                  {parseInt(quantity) > 0
+                    ? ((extrasPrice + typePrice) * parseInt(quantity)).toFixed(
+                        2
+                      )
+                    : "0.00"}
+                </h4>
               </div>
             </div>
           );
